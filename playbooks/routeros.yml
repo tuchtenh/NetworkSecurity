@@ -1,0 +1,24 @@
+---
+- name: Install MikroTik RouterOS
+  hosts: vRouter
+  become: true
+
+  tasks:
+    - name: Download MikroTik RouterOS image
+      get_url:
+        url: https://download.mikrotik.com/routeros/7.5/chr-7.5.img.zip
+        dest: "/tmp/chr.img.zip"
+
+    - name: Extract MikroTik RouterOS image
+      ansible.builtin.unarchive:
+        src: "/tmp/chr.img.zip"
+        dest: "/tmp/"
+
+    - name: Write MikroTik image to /dev/sda
+      command: "dd if=/tmp/chr.img of=/dev/sda bs=4M"
+
+    - name: Sync filesystem
+      command: "sync"
+
+    - name: Reboot the system
+      command: "reboot"
