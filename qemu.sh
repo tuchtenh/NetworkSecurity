@@ -1,23 +1,7 @@
 #!/bin/bash
 
 sudo apt update
-sudo apt install -y qemu-system-x86 qemu-utils
-
-mkdir -p /opt/mikrotik
-cd /opt/mikrotik
-
-wget https://download.mikrotik.com/routeros/7.5/chr-7.5.img.zip
-
-unzip chr-7.5.img.zip
-
-
-qemu-img create -f qcow2 hda.img 1G
-
-
-qemu-system-x86_64 -hda hda.img -cdrom chr-7.5.img -boot d -m 512 -net nic -net user -rtc base=localtime -no-reboot
-
-
-qemu-system-x86_64 -hda hda.img -m 512 -net nic -net user -rtc base=localtime
-
-
-rm chr-7.5.img.zip
+sudo apt install qemu-utils qemu-system-x86 qemu-system-gui
+wget https://cdn.mikrotik.com/routeros/7.5/mikrotik-7.5.iso
+qemu-img create -f qcow2 Image.img 2G
+qemu-system-x86_64 -cdrom mikrotik-7.5.iso -boot menu=on -drive file=Image.img -m 512 -accel tcg
